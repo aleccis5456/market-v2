@@ -56,21 +56,8 @@ class OrderController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {               
-        $userId = $request->user()->id;
-        $cartKey = "cart:{$userId}";
-        $cart = json_decode(Redis::get($cartKey));
-
-        if(!$cart){
-            return response()->json(['message' => 'no se pudo recuperar datos del carrito'],404);
-        }
-
-        $address = ShippingAdress::find($request->address_id);
-        if(!$address){
-            return response()->json(['message' => 'direccion no encotrada'],404);
-        }
-
-        $response = $this->orderService->store($userId, $request->address_id);
+    {                       
+        $response = $this->orderService->store($request->user()->id, $request->address_id);
         return $response;        
     }   
 
