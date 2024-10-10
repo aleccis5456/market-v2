@@ -12,8 +12,7 @@ class CartService
     public function addToCart($userId, $productId, $quantity = 1)
     {
         $cartKey = "cart:{$userId}";
-        $cart = json_decode(Redis::get($cartKey), true) ?? [];
-
+        $cart = json_decode(Redis::get($cartKey)) ?? [];        
         $product = Product::find($productId);
         $offer = Offer::where('product_id', $productId)->first();
         $currentPrice = $product->price;
@@ -25,23 +24,21 @@ class CartService
             } elseif ($offer->discount_type == 'fixed') {
                 $currentPrice -= $offer->discount_value; // Descuento fijo
             }
-        }
-        
+        }            
         $productInCart = false;
-        foreach ($cart as &$item) {            
+        foreach ($cart as &$item) {                     
             if($item->quantity < $product->stock){
-                if ($item['product_id'] == $product->id) {
+                if ($item->product_id == $product->id) {
                     $productInCart = true;
-                    $item['quantity'] += $quantity;
+                    $item->quantity += $quantity;
                     break;
                 }
             }else{
                 return response()->json([
                     'message' => 'el producto no tiene sufiente stock'
                 ]);
-            }
-            
-        }
+            }            
+        }        
 
         if (!$productInCart) {
             $cart[] = [
