@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('shipping_address_id')->constrained('shipping_adresses')->cascadeOnDelete(); // Dirección de envío
+            $table->foreignId('shipping_address_id')->constrained('shipping_adresses')->cascadeOnDelete();
             $table->integer('total');
             $table->string('status')->default('pending');
             $table->timestamps();

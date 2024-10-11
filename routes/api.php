@@ -2,14 +2,16 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OfferController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SellerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ShippingAdreesController;  
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redis;
-use App\Services\OrderService;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -26,11 +28,17 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::put('/removeFromCart/{cartIndex}', [CartController::class, 'removeFromCart']);
     Route::get('/showCart', [CartController::class , 'showCart']);
     
-    Route::get('/orders', [OrderController::class, 'index']);
+    Route::apiResource('/orders', OrderController::class);
     Route::get('/prepareOrder', [OrderController::class, 'prepareOrder']);
-    Route::post('/orders', [OrderController::class, 'store']);
+    //Route::post('/orders', [OrderController::class, 'store']);
 
-    Route::post('/adreeses', [ShippingAdreesController::class, 'store']);
+    Route::apiResource('/addresses', ShippingAdreesController::class);
+
+    Route::apiResource('/seller', SellerController::class);
+
+    Route::apiResource('/offer', OfferController::class);
+
+    Route::apiResource('/review', ReviewController::class);
 });
 
 
@@ -39,5 +47,3 @@ Route::get('/debug', function(){
     $cartKeys = Redis::keys('laravel_database_cart:*');
     return response()->json($cartKeys);
 });
-
-Route::post('/debug2', [OrderService::class, 'store']);

@@ -32,7 +32,7 @@ class OrderService
             ], 404);
         }
 
-        try {
+        try{
             DB::beginTransaction();
             $order = Order::create([
                 'code' => $this->setCode(),
@@ -75,7 +75,7 @@ class OrderService
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
-                'message' => 'error en el foreach',
+                'message' => 'error en el al crear orden',
                 'errors' => $e->getMessage(),
             ]);
         }

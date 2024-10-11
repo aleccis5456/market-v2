@@ -15,10 +15,27 @@ class UserController extends Controller
             'users' => $users
         ]);
     }
+
+    public function update(Request $request, string $id){
+        $request->validate([
+            'name' => 'sometimes|string',
+            'email' => 'sometimes|string|email|unique:users',
+            'password' => 'sometimes|string|confirmed|min:6',
+        ]);
+
+        $user = User::find($id);
+        if(!$user){
+            return response()->json(['message' => 'user not found'], 404);            
+        }        
+        $user->update($request->all());
+        return response()->json([
+            'message' => 'user updated',
+            'user' => $user,
+        ]);
+    }    
     
     public function enabledSeller(Request $request){       
         $user = User::find($request->user()->id);
-
         $user->is_seller = 1;
         $user->save();
 
@@ -29,13 +46,10 @@ class UserController extends Controller
             'logo' => null,
         ]);
 
-        return response()->json([
-            'messsge' => 'ahora el usuario es un vendedor',
-            'details' => 'Ahora tienes acceso como vendedor. Configura tu perfil para comenzar a vender',
-            'more details' => 'Tu perfil de vendedor ha sido configurado automáticamente con tus datos de usuario',
+        return response()->json([           
+            'more details' => 'el usuario ahora es vendedor(seller)',
             'user' => $user,
         ]);
-
     }
 
     public function desabledSeller(Request $request){        
@@ -48,6 +62,5 @@ class UserController extends Controller
             'messsge' => 'el usuario ya no es vendedor',
             'user' => $user,
         ]);
-
     }
 }

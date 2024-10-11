@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Models\Offer;
-use App\Helpers\CartHelper;
 use Illuminate\Support\Facades\Redis;
 
 class CartService
@@ -14,15 +13,15 @@ class CartService
         $cartKey = "cart:{$userId}";
         $cart = json_decode(Redis::get($cartKey)) ?? [];        
         $product = Product::find($productId);
-        $offer = Offer::where('product_id', $productId)->first();
+        $offer = Offer::where('product_id', $productId)->first();        
         $currentPrice = $product->price;
 
         if ($offer != null && $offer->active == true) {
             if ($offer->discount_type == 'percentage') {
                 $discountAmount = $product->price * ($offer->discount_value / 100);
-                $currentPrice -= $discountAmount; // Descuento porcentual
+                $currentPrice -= $discountAmount; //Descuento porcentual
             } elseif ($offer->discount_type == 'fixed') {
-                $currentPrice -= $offer->discount_value; // Descuento fijo
+                $currentPrice -= $offer->discount_value; //Descuento fijo
             }
         }            
         $productInCart = false;
@@ -40,7 +39,7 @@ class CartService
             }            
         }        
 
-        if (!$productInCart) {
+        if ($productInCart == false) {
             $cart[] = [
                 'user_id' => $userId,
                 'product_id' => $productId,

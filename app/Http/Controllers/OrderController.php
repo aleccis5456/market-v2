@@ -20,13 +20,15 @@ class OrderController extends Controller
      */    
     public function index(Request $request)
     {
-        $user_id = $request->user()->id;                
-        $orders = Order::with('shippingAdress')->where('user_id', $user_id)->get();
+        $user_id = $request->user()->id;         
+        $orders = Order::with('shippingAdress')
+                                ->where('user_id', $user_id)
+                                ->get();
         return response()->json([
             'user_orders' => [
                 'orders' => $orders,            
-            ]
-        ]);
+            ],
+        ],200);
     }
     /**
      *prepareOrder muestra los detalles para un supuesto formulario
@@ -66,7 +68,14 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $order = Order::with('shippingAdress')->find($id);
+        if(!$order){            
+            return response()->json(['message' => 'no se pudo recuperar datos de la orden'], 404);
+        }
+
+        return response()->json([
+            'order' => $order
+        ], 200);
     }
 
     /**
@@ -74,7 +83,17 @@ class OrderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'status' => 'required|string'
+        ]);
+        
+        $order = Order::find($id);
+        $order->update($request->all());                
+        
+        return response()->json([
+            'message' => 'orden actualizado',
+            'order' => $order,
+        ]);
     }
 
     /**
@@ -82,6 +101,13 @@ class OrderController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $order = Order::destroy($id);
+        if(!$order){
+            return response()->json([
+                'message' => 'NO se pudo borrar',
+                'error' =>  'not found'
+            ], 404);
+        }
+        return response()->json(['message' => 'la orden se borro'], 200);
     }
 }
