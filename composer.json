@@ -5,11 +5,11 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
-        "laravel/cashier": "^15.4",
+        "php": "^8.2",        
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "pragmarx/google2fa": "^8.0",
         "predis/predis": "2.0"
     },
     "require-dev": {

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
@@ -38,7 +39,7 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::apiResource('/offer', OfferController::class);
 
-    Route::apiResource('/review', ReviewController::class);
+    Route::apiResource('/review', ReviewController::class);    
 });
 
 
