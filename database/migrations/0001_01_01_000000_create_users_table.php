@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('is_seller')->default(false);  // Indica si el usuario es vendedor
+            $table->string('code_2fa')->nullable();
+            $table->boolean('is_2fa_enabled')->default(false);
             $table->timestamps();
         });
 

@@ -18,27 +18,38 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function(){
-    Route::apiResource('/users', UserController::class);
+    //Auth
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/enabled2fa', [AuthController::class, 'enabled2fa']);
+    Route::post('/desable2fa', [AuthController::class, 'desable2fa']);
+
+    //User
+    Route::apiResource('/users', UserController::class);    
     Route::post('/enabledSeller', [UserController::class, 'enabledSeller']);
 
+    //products
     Route::post('/products', [ProductController::class, 'store']);
     Route::get('/products' ,[ProductController::class, 'index']);
     
+    //cart
     Route::post('/addToCart', [CartController::class, 'addToCart']);
     Route::put('/removeFromCart/{cartIndex}', [CartController::class, 'removeFromCart']);
     Route::get('/showCart', [CartController::class , 'showCart']);
     
+    //orders
     Route::apiResource('/orders', OrderController::class);
-    Route::get('/prepareOrder', [OrderController::class, 'prepareOrder']);
-    //Route::post('/orders', [OrderController::class, 'store']);
+    Route::get('/prepareOrder', [OrderController::class, 'prepareOrder']);    
 
+    //addresses
     Route::apiResource('/addresses', ShippingAdreesController::class);
 
+    //seller
     Route::apiResource('/seller', SellerController::class);
 
+    //offer
     Route::apiResource('/offer', OfferController::class);
 
+    //reviews
     Route::apiResource('/review', ReviewController::class);    
 });
 
