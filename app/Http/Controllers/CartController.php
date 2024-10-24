@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redis;
 class CartController extends Controller
 {   
     protected $cartService;
+    
     public function __construct(CartService $cartService){
         $this->cartService = $cartService;
     }
@@ -18,7 +19,7 @@ class CartController extends Controller
         $cart = $this->cartService->addToCart($request->user()->id, $request->productId, 1);
         
         return response()->json([
-            'message' => 'producto agregar al carrito :D',            
+            'message' => 'producto agregado al carrito :D',            
             'cart' => $cart,
         ]);
     }

@@ -78,17 +78,10 @@ class CartService
     }
 
     public function showCart($userId)
-    {
-        // Construye la clave del carrito para el usuario
-        $cartKey = "cart:{$userId}";
-    
-        // Obtén el carrito desde Redis
-        $cart = Redis::get($cartKey);
-    
-        // Decodifica el carrito en caso de que esté en formato JSON
-        $cart = json_decode($cart, true); // Usa true para obtener un array
-    
-        // Retorna la respuesta en formato JSON
+    {       
+        $cartKey = "cart:{$userId}";         
+        $cart = Redis::get($cartKey);    
+        $cart = json_decode($cart, true);        
         return $cart;
     }
     
